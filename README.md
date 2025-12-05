@@ -37,8 +37,8 @@
 ### 3.4. Docker Compose
 Все части проекта объединены в docker-compose:
 - `db` — база данных PostgreSQL;
-- `app` — сервер FastAPI;
-- `frontend` — клиентское приложение и nginx.
+- `server` — сервер FastAPI;
+- `client` — клиентское приложение и nginx.
 
 ## 4. Как система демонстрирует работу MS-CHAPv2
 
