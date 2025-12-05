@@ -49,8 +49,10 @@
 - peer_challenge;
 - server challenge;
 - ChallengeHash;
-- NT-Response;
-- результат вычислений.
+- Состояние запроса;
+- NT-Response, вычисленный клиентом;
+- NT-Response, вычисленный сервером;
+- Результат сравнения NT-Response;
 
 ### 4.2. Серверных вычислений
 В логах backend отображаются:
@@ -75,7 +77,7 @@ backend/
   des.py           — реализация DES
   db.py            — логика работы с PostgreSQL
 
-frontend/
+client/
   src/             — клиентская логика (TypeScript)
   index.html
   nginx.conf
