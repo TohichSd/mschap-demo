@@ -98,9 +98,9 @@ docker compose up --build
 ```
 
 После запуска активны сервисы:
-- `db`
-- `app`
-- `client`
+- `db (postgres)`
+- `server (python)`
+- `client (nginx + static)`
 
 ### Доступ
 Открыть в браузере:
