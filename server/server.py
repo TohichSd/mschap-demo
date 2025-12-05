@@ -97,6 +97,7 @@ class AuthResponseRequest(BaseModel):
 
 class AuthResult(BaseModel):
     success: bool
+    server_nt_response: str  # base64
 
 
 
@@ -206,13 +207,16 @@ def auth_response(req: AuthResponseRequest) -> AuthResult:
     stored_nt_hash = user.nt_hash
     log.info("[AUTH] Verifying NT-Response for user '%s'...", req.username)
 
-    ok = MSCHAPv2.verify_nt_response(
+    # Получаем правильный NT-Response
+    server_nt_response = MSCHAPv2.compute_nt_response(
         auth_challenge=auth_challenge,
         peer_challenge=peer_challenge,
         username=req.username,
         stored_nt_hash=stored_nt_hash,
-        received_nt_response=nt_response,
     )
+
+    # Сравниваем его с полученным от клиента
+    ok = MSCHAPv2.verify_nt_response(nt_response, server_nt_response)
 
     # заканчиваем сессию
     session_manager.delete_session(req.session_id)
@@ -222,7 +226,13 @@ def auth_response(req: AuthResponseRequest) -> AuthResult:
     else:
         log.warning("[AUTH] FAILED for user '%s'", req.username)
 
-    return AuthResult(success=ok)
+    # Отправляем свой NT-Response обратно клиенту (base64)
+    server_nt_b64 = base64.b64encode(server_nt_response).decode("ascii")
+
+    return AuthResult(
+        success=ok,
+        server_nt_response=server_nt_b64,
+    )
 
 
 

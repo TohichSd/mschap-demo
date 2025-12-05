@@ -116,15 +116,21 @@ class MSCHAPv2:
         chall8 = cls.challenge_hash(peer_challenge, auth_challenge, username)  # 8 байт
         return cls.challenge_response(chall8, nt_hash)           # 24 байта
 
+
     @classmethod
-    def verify_nt_response(
+    def verify_nt_response(cls, received_nt_response: bytes, expected: bytes) -> bool:
+        if len(received_nt_response) != 24:
+            return False
+        return expected == received_nt_response
+
+    @classmethod
+    def compute_nt_response(
         cls,
         auth_challenge: bytes,
         peer_challenge: bytes,
         username: str,
         stored_nt_hash: bytes,
-        received_nt_response: bytes,
-    ) -> bool:
+    ) -> bytes:
         """
         Серверная функция: проверяет NT-Response от клиента, зная:
         - auth_challenge (который он сам выдавал),
@@ -132,12 +138,10 @@ class MSCHAPv2:
         - username,
         - stored_nt_hash
         """
-        if len(received_nt_response) != 24:
-            return False
 
         chall8 = cls.challenge_hash(peer_challenge, auth_challenge, username)
         expected = cls.challenge_response(chall8, stored_nt_hash)
-        return expected == received_nt_response
+        return expected
 
 
 if __name__ == "__main__":
@@ -157,5 +161,5 @@ if __name__ == "__main__":
     print("NT-Response length:", len(client_resp))
 
     # Сервер проверяет
-    ok = MSCHAPv2.verify_nt_response(auth_challenge, peer_challenge, username, stored_nt, client_resp)
+    ok = MSCHAPv2.compute_nt_response(auth_challenge, peer_challenge, username, stored_nt, client_resp)
     print("Verify:", ok)
