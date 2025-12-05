@@ -24,7 +24,7 @@ export function App() {
 
   const logger: ILogger = {
     log: (message: string) => {
-      setLog(prev => [...prev, message]);
+      setLog((prev: string[]) => [...prev, message]);
     },
   };
 
@@ -37,7 +37,7 @@ export function App() {
       const success = await protocolService.runDemo(username, password, logger);
       setResult(success);
     } catch (e: any) {
-      logger.log(`✗ Ошибка: ${e?.message ?? String(e)}`);
+      logger.log(`Ошибка: ${e?.message ?? String(e)}`);
       setResult(false);
     } finally {
       setLoading(false);

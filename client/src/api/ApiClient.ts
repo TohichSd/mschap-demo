@@ -7,7 +7,9 @@ export interface ChallengeResponseDto {
 
 export interface AuthResultDto {
   success: boolean;
+  server_nt_response: string; // base64
 }
+
 
 export interface RegisterResultDto {
   success: boolean;
