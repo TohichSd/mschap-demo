@@ -71,7 +71,7 @@
 ```
 backend/
   server.py        — сервер FastAPI
-  protocol.py      — реализация MS-CHAPv2
+  mschap.py      — реализация MS-CHAPv2
   des.py           — реализация DES
   db.py            — логика работы с PostgreSQL
 
@@ -98,7 +98,7 @@ docker compose up --build
 После запуска активны сервисы:
 - `db`
 - `app`
-- `frontend`
+- `client`
 
 ### Доступ
 Открыть в браузере:
